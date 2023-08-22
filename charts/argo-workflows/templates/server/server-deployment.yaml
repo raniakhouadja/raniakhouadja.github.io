@@ -124,7 +124,7 @@ spec:
       {{- end }}
       {{- with .Values.server.topologySpreadConstraints }}
       topologySpreadConstraints:
-        {{- range $constraint := . }}
+      {{- range $constraint := . }}
       - {{ toYaml $constraint | nindent 8 | trim }}
         {{- if not $constraint.labelSelector }}
         labelSelector:
