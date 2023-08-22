@@ -122,17 +122,13 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.server.topologySpreadConstraints }}
       topologySpreadConstraints:
-      {{- range $constraint := . }}
-      - {{ toYaml $constraint | nindent 8 | trim }}
-        {{- if not $constraint.labelSelector }}
+      - maxSkew: 2
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
         labelSelector:
           matchLabels:
-            {{- include "argo-workflows.selectorLabels" (dict "context" $ "name" $.Values.server.name) | nindent 12 }}
-        {{- end }}
-        {{- end }}
-      {{- end }}
+            type: controller
       {{- with .Values.server.priorityClassName }}
       priorityClassName: {{ . }}
       {{- end }}
